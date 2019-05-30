@@ -3,17 +3,37 @@ require_once('connection/SQL.php');
 require_once('config.php');
 require_once('include/view.php');
 require_once('include/security.php');
+require_once('include/user.php');
+
+$user = validate_user();
+if (!$user->valid) {
+    http_response_code(403);
+    header("Location: index.php?err=account");
+    exit;
+}
 
 if (isset($_POST['username']) && trim($_POST['username']) != "" && isset($_POST['password']) && isset($_POST['name']) && isset($_POST['email'])) {
     // create new account
+    if (!$blog['register']) {
+        http_response_code(403);
+        header('axios-location: account.php');
+        exit;
+    }
+
     if (!validate_csrf()) {
         http_response_code(403);
         header('axios-location: account.php?new');
         exit;
     }
+
     $username = $_POST['username'];
-    $exist = cavern_query_result("SELECT * FROM `user` WHERE `username`='%s' OR `email`='%s'", array($username, $_POST["email"]))['num_rows'];
-    if ($exist == 0) {
+    try {
+        $target_user = new User($username);
+
+        http_response_code(409); // 409 Conflict
+        header('axios-location: account.php?new&err=used');
+        exit;
+    } catch (NoUserException $e) {
         if (preg_match('/^[a-z][a-z0-9\_\-]*$/', $username) && strlen($username) <= 20 && strlen($_POST['name']) <= 40 && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
             $SQL->query("INSERT INTO `user` (`username`, `pwd`, `name`, `email`) VALUES ('%s', '%s', '%s', '%s')", array($username, cavern_password_hash($_POST['password'], $username), htmlspecialchars($_POST['name']), $_POST['email']));
             header('axios-location: index.php?ok=reg');
@@ -22,12 +42,8 @@ if (isset($_POST['username']) && trim($_POST['username']) != "" && isset($_POST[
             header('axios-location: index.php?err=miss');
         }
         exit;
-    } else {
-        http_response_code(409); // 409 Conflict
-        header('axios-location: account.php?new&err=used');
-        exit;
     }
-} else if (isset($_SESSION['cavern_username']) && isset($_POST['username']) && isset($_POST['old']) && (isset($_POST['name']) || isset($_POST['new']))) {
+} else if ($user->islogin && isset($_POST['username']) && isset($_POST['old']) && (isset($_POST['name']) || isset($_POST['new']))) {
     // modify account data
     if (!validate_csrf()) {
         http_response_code(403);
@@ -35,7 +51,7 @@ if (isset($_POST['username']) && trim($_POST['username']) != "" && isset($_POST[
         exit;
     }
     $username = $_POST['username'];
-    if ($username != $_SESSION['cavern_username']) {
+    if ($username !== $user->username) {
         // not the same person
         http_response_code(403);
         header('axios-location: account.php?err=edit');
@@ -77,11 +93,11 @@ if (isset($_POST['username']) && trim($_POST['username']) != "" && isset($_POST[
             exit;
         }
     }
-} else if (!isset($_SESSION['cavern_username']) && !isset($_GET['new'])) {
-    // if mode isn't definded, redirect to register page
+} else if (!$user->islogin && !isset($_GET['new'])) {
+    // if mode isn't defined, redirect to register page
     header('Location: account.php?new');
     exit;
-} else if (isset($_SESSION['cavern_username']) && isset($_GET['new'])) {
+} else if ($user->islogin && isset($_GET['new'])) {
     // if someone is logged in, then redirect to account setting page
     header('Location: account.php');
     exit;
@@ -141,11 +157,6 @@ if (isset($_GET['new'])) {
     $view->render();
 } else {
 // edit account data
-    $username = $_SESSION['cavern_username'];
-    $result = cavern_query_result("SELECT * FROM `user` WHERE `username`='%s'", array($username));
-    $name = $result['row']['name'];
-    $email = $result['row']['email'];
-
     $view = new View('theme/default.html', 'theme/nav/util.php', 'theme/sidebar.php', $blog['name'], "帳號");
     $view->add_script_source("ts('.ts.dropdown').dropdown();");
     $view->add_script("./include/js/security.js");
@@ -180,25 +191,25 @@ if (isset($_GET['new'])) {
             <div class="six wide field">
                 <label>頭貼</label>
                 <div class="ts center aligned flatted borderless segment">
-                    <img src="https://www.gravatar.com/avatar/<?= md5(strtolower($email)) ?>?d=https%3A%2F%2Ftocas-ui.com%2Fassets%2Fimg%2F5e5e3a6.png&s=500" class="ts rounded image" id="avatar">
+                    <img src="https://www.gravatar.com/avatar/<?= md5(strtolower($user->email)) ?>?d=https%3A%2F%2Ftocas-ui.com%2Fassets%2Fimg%2F5e5e3a6.png&s=500" class="ts rounded image" id="avatar">
                 </div>
                 <div data-tooltip="請透過電子信箱更換頭貼" data-tooltip-position="bottom right" class="ts top right attached label avatar tooltip">?</div>
             </div>
             <div class="ten wide field">
                 <div class="disabled field">
                     <label>帳號</label>
-                    <input type="text" name="username" value="<?= $username ?>">
+                    <input type="text" name="username" value="<?= $user->username ?>">
                 </div>
                 <div class="required field">
                     <label>暱稱</label>
-                    <input type="text" required="required" name="name" maxlength="40" value="<?= $name ?>">
+                    <input type="text" required="required" name="name" maxlength="40" value="<?= $user->name ?>">
                     <small>上限40字元。</small>
                 </div>
             </div>
         </div>
         <div class="required field">
             <label>信箱</label>
-            <input type="email" required="required" name="email" value="<?= $email ?>">
+            <input type="email" required="required" name="email" value="<?= $user->email ?>">
             <small>透過電子信箱，在 <a href="https://en.gravatar.com/" target="_blank">Gravatar</a> 更改你的頭貼。</small>
         </div>
         <div class="required field">

@@ -2,13 +2,21 @@
 require_once('connection/SQL.php');
 require_once('config.php');
 require_once('include/view.php');
+require_once('include/user.php');
 
-if (isset($_SESSION['cavern_username'])) {
+$user = validate_user();
+if (!$user->valid) {
+    http_response_code(403);
+    header("Location: index.php?err=account");
+    exit;
+}
+
+if ($user->islogin) {
     $view = new View('theme/default.html', 'theme/nav/util.php', 'theme/sidebar.php', $blog['name'], "通知");
     $view->add_script_source("ts('.ts.dropdown:not(.basic)').dropdown();");
     $view->add_script("./include/js/security.js");
     
-    $notice_list = cavern_query_result("SELECT * FROM `notification` WHERE `username` = '%s' ORDER BY `time` DESC", array($_SESSION['cavern_username']));
+    $notice_list = cavern_query_result("SELECT * FROM `notification` WHERE `username` = '%s' ORDER BY `time` DESC", array($user->username));
     
     if ($notice_list['num_rows'] > 0) {
         $regex = array(

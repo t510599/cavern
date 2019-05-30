@@ -12,7 +12,7 @@ require_once('notification.php');
 $user = validate_user();
 if (!$user->valid) {
     http_response_code(403);
-    header("Location: ../index.php?err=account");
+    header("Location: index.php?err=account");
     exit;
 }
 
