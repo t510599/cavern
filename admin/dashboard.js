@@ -47,16 +47,11 @@ Manager.prototype = {
         this.components[name].render(...args);
         delete this.cache[name];
     },
-    setHeader: function(title) {
+    setHeader: function (title) {
         $('#header').text(title);
     },
-    setLoaderState: function(state) {
-        $('.pusher > .progress').toggleClass('invisible', !state);
-    },
-    snackbar: function(message) {
-        ts('.snackbar').snackbar({
-            content: message
-        });
+    setLoaderState: function (state) {
+        $('.pusher .dimmer').toggleClass('active', state);
     }
 }
 
