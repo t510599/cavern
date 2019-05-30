@@ -1,5 +1,5 @@
 # Cavern
-> Explore those deep inside the cave.
+> Explore those deep inside the cave.  
 A simple blog system.
 
 ## Feature
