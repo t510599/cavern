@@ -1,3 +1,7 @@
+.pusher {
+    overflow-x: hidden;
+}
+
 /* nav bar */
 button#toggleSidebar {
     border-radius: 0;
@@ -13,9 +17,29 @@ button#toggleSidebar {
     top: 0;
 }
 
+.pusher > .progress:not(.invisible) + nav {
+    margin: -3px; /* to overlap progress */
+}
+
+/* loader */
+.pusher > .progress.invisible {
+    display: none;
+}
+
 /* content */
 #header {
     margin-top: 5px;
+}
+
+#content {
+    padding-bottom: 1.5em;
+}
+
+/* config */
+#config::after {
+    display: block;
+    content: '';
+    clear: both;
 }
 
 @media (max-width: 768px) {
