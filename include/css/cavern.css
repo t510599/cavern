@@ -1,0 +1,440 @@
+/* General style */
+* {
+    letter-spacing: .02em;
+}
+
+img {
+    max-width: 100%;
+    object-fit: contain;
+}
+
+div.table.wrapper {
+    overflow-x: auto;
+    width: 100%;
+}
+
+div.table.wrapper:not(:last-child) {
+    margin-bottom: .75em;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+    border: none;
+    margin-top: 0 !important;
+    padding-bottom: 0;
+}
+
+.markdown-body h1:not(.ts):not(.unstyled) {
+    font-size: 1.6em;
+}
+
+.markdown-body h2:not(.ts):not(.unstyled) {
+    font-size: 1.5em;
+}
+
+.markdown-body h3:not(.ts):not(.unstyled) {
+    font-size: 1.4em;
+}
+
+.markdown-body h4:not(.ts):not(.unstyled) {
+    font-size: 1.3em;
+}
+
+.markdown-body h5:not(.ts):not(.unstyled) {
+    font-size: 1.2em;
+}
+
+.markdown-body h6:not(.ts):not(.unstyled) {
+    font-size: 1.1em;
+}
+
+.markdown-body > .markdown + * { /* .markdown is invisible and the first element in a post, so neighbor of .markdown is the first visible element */
+    margin-top: 0 !important;
+}
+
+.markdown-body > *:last-child:not(div) {
+    margin-bottom: 0 !important;
+}
+
+.editormd-html-preview {
+    background-color: inherit;
+}
+
+.editormd-html-preview code { /* inline code */
+    font-size: 12px;
+}
+
+.editormd-html-preview a {
+    word-break: break-all;
+}
+
+.editormd-html-preview img {
+    margin: .4em 0;
+}
+
+img.emoji {
+    vertical-align: middle;
+}
+
+/* fonts */
+/* prevent this rule from overwriting the style of <span> of KaTeX */
+.markdown-body *:not(span), .markdown-body > :not(.editormd-tex) span,
+/* editor font */
+[class*="CodeMirror"] *, [class*="cm"] * {
+    font-family: Consolas,"SF Pro TC","SF Pro Text","SF Pro Icons","PingFang TC","Helvetica Neue","Helvetica","Microsoft JhengHei","Segoe UI",Ubuntu,微軟正黑體,"LiHei Pro","Droid Sans Fallback",Roboto,"Helvetica Neue","Droid Sans","Arial",sans-serif;
+}
+
+.katex * { /* hack */
+    font-family: KaTeX_Main, Times New Roman, serif;
+}
+
+/* sweet alert */
+.swal2-popup h2.swal2-title {
+    margin: 0 0 .4em;
+}
+
+/* menu */
+#menu button.login.button {
+    margin: 5px;
+}
+
+/* notification */
+#menu .notification.icon.item i.icon {
+    margin-right: 0;
+}
+
+#menu .notification.icon.item span.counter {
+    display: block;
+    padding: .1em .2em;
+    font-size: 12px;
+    color: white;
+    background-color: #F03434;
+    border-radius: .2em;
+    position: absolute;
+    top: .25em;
+    right: .25em;
+}
+
+.notification.container {
+    display: none;
+    position: absolute;
+    z-index: 11; /* to overlap editormd */
+    top: 1em;
+    right: .2em;
+    width: calc(100vw - 2.16em);
+    max-width: 400px;
+    height: 85vh;
+    max-height: 500px;
+    background-color: white;
+    border-radius: .28571rem;
+    box-shadow: 0 0 3px 0 #888888;
+}
+
+.active.notification.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.notification.container > .ts.segment:first-child {
+    background-color: #EEE;
+}
+
+.notification.container .ts.feed {
+    overflow-y: auto;
+    flex-grow: 1;
+    margin: 0;
+}
+
+.notification.container .ts.feed .event {
+    padding-left: .8em;
+    padding-right: .8em;
+}
+
+.notification.container .ts.feed .unread.event {
+    background-color: #e4f2f5;
+}
+
+.notification.container .ts.feed .event:hover {
+    background-color: #e2edef;
+}
+
+.notification.click.handler {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.notification.container .ts.fluid.bottom:last-child {
+    flex-shrink: 0;
+}
+
+.ts.dividing.header .notification.description {
+    font-size: .6em;
+    color: gray;
+    margin-left: .5em;
+}
+
+/* main */
+#main {
+    padding: 10px 0 20px;
+}
+
+/* content */
+#content {
+    min-height: 50vh;
+}
+
+/* pages */
+.loading#cards ~ #pages {
+    display: none;
+}
+
+/* cards */
+#cards {
+    padding: 1em 0;
+}
+
+.loading#cards {
+    display: none;
+}
+
+.ts.card > .content > .header:not(.ts) {
+    font-size: 1.65em;
+}
+
+.ts.card > .content > .description.markdown-body {
+    background: transparent;
+    font-size: inherit;
+    padding: 0;
+}
+
+.ts.card > .content > .description.markdown-body a {
+    word-break: break-all;
+}
+
+/* post */
+#content .ts.grid > #header > .ts.header {
+    /* align this with post content */
+    padding-left: 15px;
+}
+
+#content .ts.grid > .action.column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#content > .ts.segments:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+#post {
+    font-size: 15px;
+    margin-top: 1em;
+}
+
+.markdown-body ul:first-child, .markdown-body ol:first-child {
+    margin-top: 0;
+}
+
+.markdown-body#post h1:not(.ts) {
+    font-size: 2em;
+}
+
+.markdown-body#post h2:not(.ts) {
+    font-size: 1.85em;
+}
+
+.markdown-body#post h3:not(.ts) {
+    font-size: 1.7em;
+}
+
+.markdown-body#post h4:not(.ts) {
+    font-size: 1.55em;
+}
+
+.markdown-body#post h5:not(.ts) {
+    font-size: 1.4em;
+}
+
+.markdown-body#post h6:not(.ts) {
+    font-size: 1.25em;
+}
+
+#toc {
+    min-height: 8em;
+    max-height: calc(95vh - 3em);
+    overflow-x: auto;
+}
+
+/* code block */
+pre.prettyprint ol.linenums:not(.ts) {
+    counter-reset: code 0;
+    margin-left: 0;
+}
+
+pre.prettyprint ol.linenums:not(.ts) > li::before {
+    counter-increment: code;
+    content: counter(code);
+    
+    /* line numbers align */
+    right: 100%;
+    margin-left: 0;
+    padding-right: .5em;
+}
+
+pre.prettyprint ol.linenums:not(.ts) > li > code {
+    min-height: 1em; /* fixing collapsed empty line */
+}
+
+pre.prettyprint ol.linenums:not(.ts) > li > code > span {
+    font-family: "YaHei Consolas Hybrid", 'Consolas', "Meiryo UI", "Malgun Gothic", "Segoe UI", "Trebuchet MS", Helvetica, monospace;
+}
+
+/* post editor */
+#edit .action.column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#markdownEditor:not(.editormd-fullscreen) {
+    margin-top: 1em;
+}
+
+.editormd-fullscreen {
+    z-index: 10;
+}
+
+/* comments */
+.ts.comments {
+    min-height: 6em;
+    max-width: 100%;
+}
+
+.ts.comments .comment {
+    padding: 0.25em 0 0.25em;
+    margin: 0.25em 0 0.25em;
+}
+
+.ts.no-comment.segment:not(.active), .ts.active.loader + .fetch.button {
+    display: none;
+}
+
+.comment.header {
+    width: 100%;
+    position: sticky;
+    position: -webkit-sticky;
+    padding-top: .8em;
+    top: 0;
+    background-color: white;
+    z-index: 2;
+}
+
+.ts.comment.divider {
+    margin-top: .5em;
+}
+
+.stretched.header.column {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.comment .markdown-body {
+    padding: .2em 0;
+}
+
+.comment .markdown-body img {
+    margin: .4em 0;
+}
+
+.comment img.emoji {
+    height: 16px;
+    width: 16px;
+}
+
+.emphasized.comment {
+    animation: commentEmphasize 2s ease-in .1s;
+}
+
+/* comment editor */
+#comment > .ts.segment:first-child {
+    padding-top: 1em;
+}
+
+#comment > .ts.segment:first-child > .ts.tabbed.menu {
+    padding: 0 1em;
+}
+
+#comment > .ts.segment:not(:first-child) {
+    border-top: none;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+#comment .ts.button {
+    margin-top: 1em;
+}
+
+#preview {
+    min-height: 15em;
+}
+
+/* account */
+.ts.label.avatar.tooltip {
+    border: 0;
+    border-radius: .21429rem;
+}
+
+.ts.form .disabled.field {
+    cursor: not-allowed;
+    pointer-events: initial;
+}
+
+.ts.form .disabled.field input {
+    pointer-events: none;
+}
+
+/* profile */
+#avatar {
+    width: 7.5em;
+}
+
+/* sidebar */
+#sidebar .ts.header .avatar.image {
+    margin-right: 5px;
+}
+
+#sidebar .ts.header .negative.sub.header {
+    color: #CE5F58;
+}
+
+/* footer */
+footer {
+    padding-bottom: 15px;
+}
+
+footer .ts.divider {
+    width: 80%;
+    margin: auto;
+}
+
+@keyframes commentEmphasize {
+    from {
+        background-color: #e4f2f5;
+    }
+
+    to {
+        background-color: unset;
+    }
+}

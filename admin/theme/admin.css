@@ -1,0 +1,38 @@
+/* nav bar */
+button#toggleSidebar {
+    border-radius: 0;
+    border-bottom-right-radius: .28571rem;
+    visibility: hidden;
+}
+
+.pusher > nav {
+    z-index: 14;
+    position: sticky;
+    position: -webkit-sticky; /* safari */
+    left: 0;
+    top: 0;
+}
+
+/* content */
+#header {
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .ts.visible.sidebar:not(.overlapped) ~ .pusher.squeezable {
+        /* RWD fix */
+        width: 100vw;
+        left: 0;
+    }
+
+    button#toggleSidebar {
+        visibility: visible;
+    }
+
+    .visible.sidebar ~ .pusher > nav {
+        width: calc(100vw - 230px);
+        transform: translate3d(230px, 0, 0);
+        transition: transform .45s cubic-bezier(0.23, 1, 0.32, 1);
+        will-change: transform;
+    }
+}

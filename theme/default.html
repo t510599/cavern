@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{part} | {title}</title>
+    <!-- Tocas UI：CSS 與元件 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css">
+    <!-- Tocas JS：模塊與 JavaScript 函式 -->
+    <script src="include/js/lib/tocas.js"></script>
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.26.11/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="https://pandao.github.io/editor.md/css/editormd.css" />
+    <link rel="stylesheet" href="include/css/cavern.css">
+</head>
+<body>
+    {nav}
+    <div class="ts large vertically padded fluid heading slate">
+        <div class="ts narrow container">
+            <div class="header">{title}</div>
+            <div class="description">Welcome to {title}</div>
+        </div>
+    </div>
+    <div class="ts narrow container" id="main">
+        <div class="ts stackable grid">
+            <div class="twelve wide column" id="content">
+                {message}
+                {content}
+            </div>
+            <div class="four wide column" id="sidebar">
+                {sidebar}
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="ts divider"></div>
+        <div class="ts center aligned basic segment">   
+            Powered by <a href="https://app.stoneapp.tech/#cavern">Cavern</a>
+        </div>
+    </footer>
+    <!-- Anchor -->
+    <div class="ts bottom right snackbar">
+        <div class="content"></div>
+        <a class="action"></a>
+    </div>
+    <!-- Scripts -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    {script}
+</body>
+</html>
