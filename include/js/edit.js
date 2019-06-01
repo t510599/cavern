@@ -121,10 +121,9 @@ function loadDraft() {
 $(document.edit).on('submit', function(e) {
     e.preventDefault();
     var _this = this;
-    let fd = new URLSearchParams(new FormData(this)).toString();
     axios.request({
         method: "POST",
-        data: fd,
+        data: new FormData(this),
         url: "post.php",
         headers: {
             'Content-Type': "application/x-www-form-urlencoded"

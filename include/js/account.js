@@ -60,10 +60,9 @@ function eventListenerInitialize (form, inputs) {
             return undefined;
         }
 
-        let fd = new URLSearchParams(new FormData(this)).toString();
         axios.request({
             method: "POST",
-            data: fd,
+            data: new FormData(this),
             url: "account.php",
             headers: {
                 'Content-Type': "application/x-www-form-urlencoded"
