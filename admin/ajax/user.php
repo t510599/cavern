@@ -13,10 +13,14 @@ if (!$user->valid) {
     send_error(403, "nopermission");
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // modify account data
+if ($_SERVER["REQUEST_METHOD"] == "PATCH" || $_SERVER["REQUEST_METHOD"] == "POST") {
+    // patch: modify; post: create
     if (!validate_csrf()) {
         send_error(403, "csrf");
+    }
+    if ($_SERVER["REQUEST_METHOD"] == "PATCH") {
+        parse_str(file_get_contents('php://input'), $_POST);
+        // hack
     }
 
     if (isset($_POST['username']) && (isset($_POST['name']) || isset($_POST['password']))) {
@@ -25,8 +29,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         try {
             $target_user = new User($username);
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                // create new user, but user exists
+                send_error(409, "userexists");
+            }
         } catch (NoUserException $e) {
-            send_error(404, "nouser");
+            if ($_SERVER["REQUEST_METHOD"] == "PATCH") {
+                // modify one that not exist -> error
+                send_error(404, "nouser");
+            } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                // create new user
+                $SQL->query("INSERT INTO `user` (`username`) VALUES ('%s')", array($username));
+            }
         }
 
         if (trim($_POST['password']) != '') {
@@ -48,8 +62,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             send_error(400, "noemail");
         }
-        
-        $SQL->query("UPDATE `user` SET `muted`='%d' WHERE `username`='%s'", array($_POST['muted'], $username));
+
+        if (isset($_POST["muted"])) {
+            $muted = 1;
+        } else {
+            $muted = 0;
+        }
+
+        $level = intval($_POST['role']);
+        if ($level > 9) {
+            $level = 9;
+        } else if ($level < 0) {
+            $level = 0;
+        }
+
+        $SQL->query("UPDATE `user` SET `muted`='%d' AND `level`='%d' WHERE `username`='%s'", array($muted, $level, $username));
 
         header("Content-Type: application/json");
         echo json_encode(array("status" => TRUE, "modified" => $username));
@@ -69,7 +96,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 "username" => $data['username'],
                 "name" => $data['name'],
                 "email" => $data['email'],
-                "role" => cavern_level_to_role($data['level'])
+                "level" => intval($data['level']),
+                "role" => cavern_level_to_role($data['level']),
+                "muted" => (($data["muted"] == 1) ? TRUE : FALSE)
             );
         } while ($user_query['row'] = $user_query['query']->fetch_assoc());
     }
