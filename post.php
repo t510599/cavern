@@ -277,15 +277,15 @@ if (isset($_GET['pid'])) {
             exit;
         }
 
-        if ($post->author != $user->username) {
+        if ($post->author != $user->username && $user->level < 8) {
             http_response_code(403);
             header('Location: post.php?err=edit');
             exit;
         }
-    }
 
-    $title = $post->title;
-    $content = $post->content;
+        $title = $post->title;
+        $content = $post->content;
+    }
 
     $view = new View('theme/default.html', 'theme/nav/util.php', 'theme/sidebar.php', $blog['name'], ($title == "" ? "文章" : $title));
 
