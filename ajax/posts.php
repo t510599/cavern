@@ -66,7 +66,7 @@ if (isset($_GET['pid'])) {
             "SELECT `post`.*, `user`.name FROM `post` INNER JOIN `user` ON `post`.username = `user`.username WHERE `post`.username = '%s' ORDER BY `time`",
             array($_GET['username'])
         ));
-        $all_posts_count = cavern_query_result("SELECT COUNT(*) AS `count` FROM `post` WHERE `username` = '%s'", array($_GET['username']))['row']['count'];
+        $all_posts_count = sizeOf($post_list);
     } else {
         $post_list = article_list(cavern_query_result(
             "SELECT `post`.*, `user`.name FROM `post` INNER JOIN `user` ON `post`.username = `user`.username ORDER BY `time` DESC LIMIT %d,%d",
@@ -86,9 +86,8 @@ if (isset($_GET['pid'])) {
         $post = array(
             'username' => $article->author,
             'name' => $article->name,
-            'pid' => $article->pid,
+            'pid' => intval($article->pid),
             'title' => $article->title,
-            'content' => $article->content,
             'time' => $article->time,
             'likes_count' => $article->likes_count,
             'comments_count' => $article->comments_count,
