@@ -26,7 +26,7 @@ class User {
                 $this->level = $data['level'];
                 $this->muted = ($data['muted'] == 1 ? true : false);
                 $this->email = $data['email'];
-            } else {
+            } else if ($username != ""){
                 throw new NoUserException($username);
             }
 
