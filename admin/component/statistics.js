@@ -13,6 +13,8 @@
     }
 
     function renderPage(data) {
+        let doc = pageManager.document;
+
         let iconName = {
             "post": "file text",
             "user": "users",
@@ -25,16 +27,17 @@
             "comment": "留言總數"
         };
 
+        let overviewSegment = create('div', "ts primary segment");
+        let blogNameContainer = create('div', "ts large header");
+        let cardContainer = create('div', "ts stackable three cards");
         let statTemplate = `<div class="ts left aligned statistic"><div class="value">{{ value }}</div><div class="label">{{ label }}</div></div>`
-
-        let cardContainer = create('div'); cardContainer.className = "ts stackable three cards";
 
         for (let key in data) {
             if (Object.keys(statLabel).indexOf(key) != -1) {
-                let card = create('div'); card.className = "ts card";
-                let content = create('div'); content.className = "content";
-                let symbol = create('div'); symbol.className = "symbol";
-                let icon = create('i'); icon.className = `${iconName[key]} icon`;
+                let card = create('div', "ts card");
+                let content = create('div', "content");
+                let symbol = create('div', "symbol");
+                let icon = create('i', `${iconName[key]} icon`);
 
                 content.innerHTML = statTemplate.replace("{{ value }}", data[key]).replace("{{ label }}", statLabel[key]);
                 symbol.appendChild(icon);
@@ -44,19 +47,24 @@
                 cardContainer.appendChild(card);
             } else if (key === "name") {
                 // blog name
+                blogNameContainer.textContent = data[key];
             }
         }
 
         // finish up
         setTimeout(() => {
-            pageManager.document.innerHTML = "";
-            pageManager.document.appendChild(cardContainer);
+            doc.innerHTML = "";
+            overviewSegment.appendChild(blogNameContainer);
+            overviewSegment.appendChild(cardContainer);
+            doc.appendChild(overviewSegment);
             pageManager.setLoaderState(false)
-        }, 500);
+        }, 1000);
     }
 
-    function create(tag) {
-        return document.createElement(tag);
+    function create(tag, className="") {
+        let el = document.createElement(tag);
+        el.className = className;
+        return el;
     }
 
     pageManager.register("statistics", function () {
