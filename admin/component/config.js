@@ -24,7 +24,8 @@
         };
 
         let formContainer = create('div');  formContainer.className = "ts form";
-        let form = create('form'); form.method = "POST"; form.action = "ajax/config.php"; form.name = "config"; form.id = "config";
+        let form = create('form'); form.method = "POST"; form.action = "ajax/config.php"; form.name = "config"; form.id = "config"; form.className = "clearfix";
+        form.autocomplete = "nope";
 
         for (key in data) {
             if (["name", "limit", "register"].indexOf(key) != -1) {
