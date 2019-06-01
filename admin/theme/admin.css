@@ -2,6 +2,17 @@
     overflow-x: hidden;
 }
 
+.clearfix::after {
+    display: block;
+    content: '';
+    clear: both;
+}
+
+div.table.wrapper {
+    overflow-x: auto;
+    width: 100%;
+}
+
 /* nav bar */
 button#toggleSidebar {
     border-radius: 0;
@@ -35,11 +46,17 @@ button#toggleSidebar {
     padding-bottom: 1.5em;
 }
 
-/* config */
-#config::after {
-    display: block;
-    content: '';
-    clear: both;
+/* likers list */
+details.ts.accordion div.content {
+    padding-left: 1em;
+}
+
+/* user avatar */
+#avatar {
+    max-width: 15em;
+    max-height: 15em;
+    width: auto;
+    height: auto;
 }
 
 @media (max-width: 768px) {

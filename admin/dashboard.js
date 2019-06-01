@@ -84,6 +84,9 @@ router.on({
     "/post/page/:page": function (params) {
         render("post", "page", params.page);
     },
+    "/post/user/:username": function (params) {
+        render("post", "user", params.username);
+    },
     "/user": function () {
         render("user", "list");
     },
