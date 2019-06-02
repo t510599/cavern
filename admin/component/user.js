@@ -148,7 +148,7 @@
             }
 
             if (e == "username" && mode == "username") {
-                input.disabled = "disabled";
+                field.classList.add("disabled");
             }
 
             field.appendChild(label);
@@ -162,7 +162,11 @@
         doc.appendChild(formContainer);
     }
 
-    function sendData(mode, data) {
+    function sendData(mode, form) {
+        let data = new FormData(form);
+        if (form.muted.checked) {
+            data.append("muted", "1");
+        }
         let fd = new URLSearchParams(data).toString();
         axios.request({
             method: (mode == "add" ? "POST" : "PATCH"),
@@ -244,7 +248,7 @@
         } else {
             $('form').on('submit', function (e) {
                 e.preventDefault();
-                sendData(mode, new FormData(this));
+                sendData(mode, this);
             })
         }
     }

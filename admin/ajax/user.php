@@ -76,7 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "PATCH" || $_SERVER["REQUEST_METHOD"] == "POST
             $level = 0;
         }
 
-        $SQL->query("UPDATE `user` SET `muted`='%d' AND `level`='%d' WHERE `username`='%s'", array($muted, $level, $username));
+        $SQL->query("UPDATE `user` SET `muted`='%d', `level`='%d' WHERE `username`='%s'", array($muted, $level, $username));
 
         header("Content-Type: application/json");
         echo json_encode(array("status" => TRUE, "modified" => $username));
