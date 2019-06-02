@@ -192,6 +192,9 @@
                 case "emailused":
                     pageManager.snackbar("信箱已被其他使用者使用");
                     break;
+                case "lowlevel":
+                    pageManager.snackbar("權限不足");
+                    break;
                 default:
                     pageManager.snackbar("發生錯誤");
                     break;

@@ -75,6 +75,10 @@ if ($_SERVER["REQUEST_METHOD"] == "PATCH" || $_SERVER["REQUEST_METHOD"] == "POST
         } else if ($level < 0) {
             $level = 0;
         }
+        // you cannot promote user to level higher than youself
+        if ($level > $user->level) {
+            send_error(403, "lowlevel");
+        }
 
         $SQL->query("UPDATE `user` SET `muted`='%d', `level`='%d' WHERE `username`='%s'", array($muted, $level, $username));
 
