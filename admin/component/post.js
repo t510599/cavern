@@ -2,7 +2,8 @@
     let listData = {
         page: -1,
         limit: -1,
-        allPostCount: -1
+        allPostCount: -1,
+        username: undefined
     };
 
     async function fetchPost(mode, data) {
@@ -10,7 +11,7 @@
             method: "GET",
             url: "../ajax/posts.php"
         }
-        
+
         switch (mode) {
             case "page":
                 queryData.url += `?page=${data}`;
@@ -73,7 +74,7 @@
         var table = create('table', "ts sortable celled striped table");
 
         let thead = create('thead');
-        (["標題", "讚", "留言", "日期", "管理"]).forEach((e, _i) => {
+        (["標題", "作者", "讚", "留言", "日期", "管理"]).forEach((e, _i) => {
             let th = create('th'); th.textContent = e;
             thead.appendChild(th);
         })
@@ -82,13 +83,15 @@
         var tbody = create('tbody');
         for (post of data["posts"]) {
             let tr = create("tr");
-            (["title", "likes_count", "comments_count", "time"]).forEach((e, _i) => {
+            (["title", "author", "likes_count", "comments_count", "time"]).forEach((e, _i) => {
                 let td = create('td');
                 if (e != "title") td.classList.add("collapsing");
                 if (e.indexOf("count") != -1) td.classList.add("center", "aligned");
 
                 if (e == "title") {
                     td.innerHTML = `<a href="/post/${post['pid']}" data-pid="${post['pid']}" data-navigo>${post[e]}</a>`;
+                } else if (e == "author") {
+                    td.innerHTML = `<a href="/post/user/${post[e]}" data-username="${post[e]}" data-navigo>${post[e]}</a>`;
                 } else {
                     td.textContent = post[e];
                 }
@@ -138,7 +141,7 @@
             let content = create('div', "content");
             let symbol = create('div', "symbol");
             let icon = create('i', `${iconName[e]} icon`);
-    
+
             content.innerHTML = statTemplate.replace("{{ value }}", data[e]).replace("{{ label }}", statLabel[e]);
             symbol.appendChild(icon);
             card.appendChild(content);
@@ -187,7 +190,12 @@
         });
         segment.appendChild(actionsContainer);
         doc.appendChild(segment);
-        doc.insertAdjacentHTML("beforeend", `<a class="ts button" href="/post/page/${(listData["page"] > -1 ? listData["page"] : 1)}" data-navigo>返回列表</a>`);
+        if (listData.username) {
+            var backHref = `/post/user/${listData.username}`;
+        } else {
+            var backHref = `/post/page/${(listData["page"] > -1 ? listData["page"] : 1)}`;
+        }
+        doc.insertAdjacentHTML("beforeend", `<a class="ts button" href="${backHref}" data-navigo>返回列表</a>`);
     }
 
     function pagination(all, limit, currentPage) {

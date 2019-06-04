@@ -84,7 +84,7 @@ if (isset($_GET['pid'])) {
 
     foreach ($post_list as $_key => $article) {
         $post = array(
-            'username' => $article->author,
+            'author' => $article->author,
             'name' => $article->name,
             'pid' => intval($article->pid),
             'title' => $article->title,
