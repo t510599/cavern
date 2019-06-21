@@ -12,7 +12,7 @@ $user = validate_user();
 if (!$user->valid) {
     http_response_code(403);
     header("Content-Type: applcation/json");
-    echo json_encode(array('status' => 'novalid'));
+    echo json_encode(array('status' => 'invalid'));
     exit;
 }
 
