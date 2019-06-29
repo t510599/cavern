@@ -14,25 +14,18 @@ if (!$user->valid) {
     exit;
 }
 
-if (!$user->login) {
-    http_response_code(403);
-    header('Content-Type: application/json');
-    echo json_encode(array('status' => 'nologin'));
-    exit;
+if (!$user->islogin) {
+    send_error(401, "nologin");
 }
 
 if (isset($_GET['fetch']) || isset($_GET['count'])) {
-    if (isset($user->username)) {
-        if (isset($_GET['fetch'])) {
-            $data = process_notifications(20); // fetch 20 comments
-            $SQL->query("UPDATE `notification` SET `read` = 1 WHERE `read` = 0 AND `username` = '%s'", array($user->username)); // read all comments
-        } else if (isset($_GET['count'])) {
-            $query = cavern_query_result("SELECT COUNT(*) AS `count` FROM `notification` WHERE `username` = '%s' AND `read` = 0", array($user->username));
-            $count = $query['row']['count'];
-            $data = array("status" => TRUE, "fetch" => round($_SERVER['REQUEST_TIME_FLOAT'] * 1000), "unread_count" => $count);
-        }
-    } else {
-        send_error(401, "nologin");
+    if (isset($_GET['fetch'])) {
+        $data = process_notifications(20); // fetch 20 comments
+        $SQL->query("UPDATE `notification` SET `read` = 1 WHERE `read` = 0 AND `username` = '%s'", array($user->username)); // read all comments
+    } else if (isset($_GET['count'])) {
+        $query = cavern_query_result("SELECT COUNT(*) AS `count` FROM `notification` WHERE `username` = '%s' AND `read` = 0", array($user->username));
+        $count = $query['row']['count'];
+        $data = array("status" => TRUE, "fetch" => round($_SERVER['REQUEST_TIME_FLOAT'] * 1000), "unread_count" => $count);
     }
 } else {
     send_error(404, "error");
