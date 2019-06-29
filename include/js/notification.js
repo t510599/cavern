@@ -89,7 +89,7 @@ function parseNotification(data) {
     function parseMessage(message, url) {
         let regex = {
             "username": /\{([^\{\}]+)\}@(\w+)/g,
-            "url": /\[([^\[\[]*)\]/g
+            "url": /\[(.*)\]/g
         };
 
         return message.replace(regex.username, function (_match, name, id, _offset, _string) {
