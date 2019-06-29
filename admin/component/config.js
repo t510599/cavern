@@ -87,7 +87,6 @@
                 data: data
             }).then((res) => {
                 pageManager.snackbar('儲存成功!');
-                pageManager.load("config"); // reload
             }).catch((err) => {
                 if (err.response) {
                     pageManager.snackbar(`儲存失敗: ${err.response.data["status"]}`);
