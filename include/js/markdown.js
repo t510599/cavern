@@ -12,9 +12,11 @@ function postProcess(...callbacks) {
     
     function linkSanitize() {
         $('.markdown-body a').each((_i, e) => {
-            href = (e.getAttribute('href')) ? _.unescape(e.getAttribute('href').toLowerCase()) : "";
+            href = (e.href) ? _.unescape(e.href.toLowerCase()) : "";
             if (href.indexOf('javascript:') != -1) {
-                e.setAttribute('href', '#');
+                e.href = '#';
+            } else {
+                e.href = e.href.replace(/%40/, '@');
             }
         });
     }

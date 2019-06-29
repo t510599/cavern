@@ -9,10 +9,12 @@ function parse_user_tag($markdown) {
     $regex = array(
         "code_block" => "/(`{1,3}[^`]*`{1,3})/",
         "email" => "/[^@\s]*@[^@\s]*\.[^@\s]*/",
+        "url" => "/https?\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]+(\/\S*)/",
         "username" => "/@(\w+)/"
     );
 
     $tmp = preg_replace($regex["code_block"], " ", $markdown);
+    $tmp = preg_replace($regex['url'], " ", $tmp);
     $tmp = preg_replace($regex["email"], " ", $tmp);
 
     preg_match_all($regex["username"], $tmp, $username_list);
