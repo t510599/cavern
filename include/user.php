@@ -23,7 +23,7 @@ class User {
                 $data = $query['row'];
                 $this->username = $data["username"];
                 $this->name = $data['name'];
-                $this->level = $data['level'];
+                $this->level = intval($data['level']);
                 $this->muted = ($data['muted'] == 1 ? true : false);
                 $this->email = $data['email'];
             } else if ($username != ""){
