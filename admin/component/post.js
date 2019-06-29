@@ -240,7 +240,7 @@
                         url: "../post.php?del=" + pid
                     }).then(function (res) {
                         pageManager.snackbar('刪除成功');
-                        router.navigate('/post'); // reload
+                        pageManager.load("post", "page", listData.page); // reload
                     }).catch(function (err) {
                         switch (err.response.status) {
                             case 404:
