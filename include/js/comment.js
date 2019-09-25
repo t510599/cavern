@@ -221,8 +221,10 @@ function parseComments(data) {
             return false;
         }
         if (commentLock) {
-            snackbar(`每 ${commentRate} 秒只能發一則留言。`);
-            return false;
+        	if (!commentContainer.dataset.editId) {
+                snackbar(`每 ${commentRate} 秒只能發一則留言。`);
+                return false;
+            }
         } else if (!commentContainer.dataset.editId) {
             // only new comment should be limited
             commentLock = true;

@@ -12,7 +12,7 @@ $user = validate_user();
 if (!$user->valid) {
     http_response_code(403);
     header("Content-Type: applcation/json");
-    echo json_encode(array('status' => 'invalid'));
+    echo json_encode(array('status' => 'novalid'));
     exit;
 }
 
@@ -53,7 +53,7 @@ if (!isset($_GET['pid']) && !isset($_GET['del']) && !isset($_POST['pid']) && !is
                 "time" => round($_SERVER['REQUEST_TIME_FLOAT'] * 1000)
             );
         } else if (isset($_POST['content'])) {
-            if (isset($_POST['pid']) && trim($_POST['pid']) && isset($_SESSION['cavern_comment_time']) && $_SERVER['REQUEST_TIME'] - $_SESSION['cavern_comment_time'] < 10) {
+            if (isset($_POST['pid']) && trim($_POST['pid']) != "" && isset($_SESSION['cavern_comment_time']) && $_SERVER['REQUEST_TIME'] - $_SESSION['cavern_comment_time'] < 10) {
                 // user can create one comment per 10 seconds
                 $remain_second = 10 - ($_SERVER['REQUEST_TIME'] - $_SESSION['cavern_comment_time']);
                 header('Retry-After: ' . $remain_second);
@@ -99,6 +99,7 @@ if (!isset($_GET['pid']) && !isset($_GET['del']) && !isset($_POST['pid']) && !is
                         do {
                             $u = $commenters['row']['username'];
                             if (!in_array($u, $username_list) && $u != $article->author && $u != $user->username) {
+                            	$username_list[] = $u;
                                 cavern_notify_user($u, "在你回應的文章 [{$article->title}] 中有了新的回應", "post.php?pid={$article->pid}#comment-$comment_id", "comment");
                             }
                         } while ($commenters['row'] = $commenters['query']->fetch_assoc());
@@ -112,6 +113,7 @@ if (!isset($_GET['pid']) && !isset($_GET['del']) && !isset($_POST['pid']) && !is
                         do {
                             $u = $likers['row']['username'];
                             if (!in_array($u, $username_list) && $u != $article->author && $u != $user->username) {
+                            	$username_list[] = $u;
                                 cavern_notify_user($u, "在你喜歡的文章 [{$article->title}] 中有了新的回應", "post.php?pid={$article->pid}#comment-$comment_id", "comment");
                             }
                         } while ($likers['row'] = $likers['query']->fetch_assoc());
