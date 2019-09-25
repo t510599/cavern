@@ -33,6 +33,10 @@ if ($_SERVER["REQUEST_METHOD"] == "PATCH" || $_SERVER["REQUEST_METHOD"] == "POST
                 // create new user, but user exists
                 send_error(409, "userexists");
             }
+            // you cannot modify data of those with higher permission than you
+            if ($target_user->level > $user->level) {
+            	send_error(403, "nopermission");
+            }
         } catch (NoUserException $e) {
             if ($_SERVER["REQUEST_METHOD"] == "PATCH") {
                 // modify one that not exist -> error
