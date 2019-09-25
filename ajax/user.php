@@ -18,7 +18,7 @@ if (isset($_GET['username']) && trim($_GET['username']) != "") {
     $username = $user->username;
 } else {
     // username isn't provided
-    send_error(404, "error");
+    send_error(404, "error", $user->islogin);
 }
 
 try {
