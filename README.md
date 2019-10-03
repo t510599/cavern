@@ -4,11 +4,11 @@
 A simple blog system.
 
 ## Feature
-Using editor.md
-Able to make comments and reactions to posts
+Able to make comments and like posts
 Distributes users onto different classes, each had its own permissions
 ## Requirements
 
 ## Install
 
 ## Libraries
+editormd
