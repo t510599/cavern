@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $limit = abs(intval(@$_POST["limit"]));
         $content = file_get_contents($template_filename);
         $new_content = strtr($content, array(
-            "{blog_name}" => addslashes(@$_POST["name"]),
+            "{blog_name}" => addslashes(@htmlspecialchars($_POST["name"])),
             "{limit}" => ($limit != 0 ? $limit : 10),
             "{register}" => (@$_POST["register"] === "true" ? "true" : "false")
         ));
