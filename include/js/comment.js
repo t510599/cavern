@@ -31,7 +31,7 @@ function fetchComments() {
         let data = res.data;
         let t = new Date(data.fetch);
         post.fetchTime = Math.ceil(data.fetch / 1000); // php timestamp
-        $('span.fetch.time').text(`Last fetch: ${t.getHours()}:${ t.getMinutes() < 10 ? '0' + t.getMinutes() : t.getMinutes() }`);
+        $('span.fetch.time').text(`Last fetch: ${t.getHours() < 10 ? '0' + t.getHours() : t.getHours()}:${ t.getMinutes() < 10 ? '0' + t.getMinutes() : t.getMinutes() }`);
         parseComments(data);
     }).catch(function (error) {
         if (error.response) {
