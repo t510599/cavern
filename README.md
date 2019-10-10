@@ -12,10 +12,11 @@ Distributes users onto different classes, each had its own permissions
 ## Install
 1. Set database information. `connection/SQL.php`
 2. Set blog config. `config.php`
-3. Done!
+3. Import SQL file. `cavern.sql`
+4. Done!
 
 ## Libraries
-editormd
+- editormd
 
 ## Cavern API Quick Start
 To get data from Cavern, a recommended way is to use the **Cavern API**.
