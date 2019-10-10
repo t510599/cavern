@@ -7,8 +7,12 @@ A simple blog system.
 Able to make comments and like posts
 Distributes users onto different classes, each had its own permissions
 ## Requirements
+- `php-mbstring`
 
 ## Install
+1. Set database information. `connection/SQL.php`
+2. Set blog config. `config.php`
+3. Done!
 
 ## Libraries
 editormd
