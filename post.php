@@ -49,7 +49,8 @@ if ($user->islogin && isset($_POST['pid']) && isset($_POST['title']) && isset($_
         $username_list = parse_user_tag($_POST['content']);
         foreach ($username_list as $key => $id) {
             if ($id == $user->username) continue;
-            cavern_notify_user($id, "{{$user->name}}@{$user->username} 在 [{$_POST['title']}] 中提到了你", "post.php?pid=$pid");
+            $_title = htmlspecialchars($_POST['title']);
+            cavern_notify_user($id, "{{$user->name}}@{$user->username} 在 [$_title] 中提到了你", "post.php?pid=$pid");
         }
 
         http_response_code(201); // 201 Created
