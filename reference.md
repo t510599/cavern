@@ -11,8 +11,8 @@
     - [Errors](#Errors)
         - [NoUserError](#NoUserError)
     - [Methods](#Methods)
+        - [get](#get)
         - [get_with_username](#get_with_username)
-        - get_current
 - [Post](#Post)
 - [Like](#Like)
 - [Comment](#Comment)
