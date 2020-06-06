@@ -1,3 +1,11 @@
+html, body {
+    min-height: 100%;
+}
+
+.ts.sidebar {
+    height: 100%;
+}
+
 .pusher {
     overflow-x: hidden;
 }
