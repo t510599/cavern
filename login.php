@@ -3,8 +3,10 @@ require_once('include/security.php');
 require_once('connection/SQL.php');
 require_once('config.php');
 
-if (isset($_SESSION['cavern_username'])) {
-    if (isset($_GET['logout'])) {
+// logout
+if (isset($_GET['logout'])) {
+    if (isset($_SESSION['cavern_username'])) {
+        // user who has logged in wants to log out
         if (validate_csrf()) {
             cavern_logout();
             header('axios-location: index.php?ok=logout');
@@ -12,7 +14,21 @@ if (isset($_SESSION['cavern_username'])) {
             http_response_code(403);
             echo json_encode(array("status" => 'csrf'));
         }
-    } else if (isset($_GET['next']) && $_GET['next'] == "admin") {
+    } else {
+        // session expired users or guests
+        if (validate_csrf()) {
+            header('axios-location: index.php?err=nologin');
+        } else {
+            // maybe user open this page directly
+            header('Location: login.php');
+        }
+    }
+    exit;
+}
+
+// logged in user redirect
+if (isset($_SESSION['cavern_username'])) {
+    if (isset($_GET['next']) && $_GET['next'] == "admin") {
         header("Location: ./admin/");
     } else {
         header('Location: index.php');
