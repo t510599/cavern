@@ -21,7 +21,7 @@ if ($user->islogin) {
     if ($notice_list['num_rows'] > 0) {
         $regex = array(
             "username" => "/\{([^\{\}]+)\}@(\w+)/",
-            "url" => "/\[([^\[\[]*)\]/"
+            "url" => "/\[(.*)\]/"
         );
 ?>
 <div class="ts big dividing header">通知 <span class="notification description">#僅顯示最近 100 則通知</span></div>
