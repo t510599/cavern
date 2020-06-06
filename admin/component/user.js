@@ -24,7 +24,15 @@
                     break;
             }
         } catch (e) {
-            console.error(e);
+            switch (e.response.data.status) {
+                case "nopermission":
+                    pageManager.snackbar("沒有權限，請確認登入狀態");
+                    break;
+                default:
+                    pageManager.snackbar("發生錯誤");
+                    console.error(e);
+                    break;
+            }
         }
         bindListener(mode);
         setTimeout(() => {
@@ -114,11 +122,12 @@
 
         Object.keys(fieldName).forEach((e, _i) => {
             let field = create('div', "field");
-            let label = create('label');
-            label.textContent = fieldName[e];
+            let input;
+            let fieldLabel = create('label');
+            fieldLabel.textContent = fieldName[e];
 
             if (e == "role") {
-                var input = create('select'); input.name = e;
+                input = create('select'); input.name = e;
                 [0, 1, 8, 9].forEach((opt, _i) => {
                     let option = create('option');
                     option.value = opt;
@@ -129,9 +138,9 @@
                     input.appendChild(option);
                 });
             } else if (e == "password") {
-                var input = create('input'); input.name = e; input.type = "password";
+                input = create('input'); input.name = e; input.type = "password";
             } else if (e == "muted") {
-                var input = create('div', "ts toggle checkbox");
+                input = create('div', "ts toggle checkbox");
                 let checkbox = create('input'); checkbox.id = "muted"; checkbox.type = "checkbox";
                 checkbox.value = "on";
                 let label = create('label'); label.setAttribute("for", "muted");
@@ -141,17 +150,23 @@
                 input.appendChild(checkbox);
                 input.appendChild(label);
             } else {
-                var input = create('input'); input.name = e; input.type = "text";
+                input = create('input'); input.name = e; input.type = "text";
                 if (mode == "username") {
                     input.value = data[e];
                 }
             }
 
-            if (e == "username" && mode == "username") {
-                field.classList.add("disabled");
+            if (e == "username") {
+                if (mode == "username") {
+                    field.classList.add("disabled");
+                } else {
+                    field.classList.add("required");
+                }
             }
 
-            field.appendChild(label);
+            input.autocomplete = "off";
+
+            field.appendChild(fieldLabel);
             field.appendChild(input);
             form.appendChild(field);
         });
@@ -176,28 +191,30 @@
             pageManager.snackbar("操作成功!");
             router.navigate("/user");
         }).catch((err) => {
-            switch (err.response.data.status) {
-                case "userexists":
-                    pageManager.snackbar("使用者已經存在");
-                    break;
-                case "nouser":
-                    pageManager.snackbar("使用者不存在");
-                    break;
-                case "noname":
-                    pageManager.snackbar("請填寫暱稱");
-                    break;
-                case "noemail":
-                    pageManager.snackbar("請填寫信箱");
-                    break;
-                case "emailused":
-                    pageManager.snackbar("信箱已被其他使用者使用");
-                    break;
-                case "lowlevel":
-                    pageManager.snackbar("權限不足");
-                    break;
-                default:
-                    pageManager.snackbar("發生錯誤");
-                    break;
+            let code = err.response.data.status;
+            let messages = {
+                // user
+                "userexists": "使用者已經存在",
+                "nouser": "使用者不存在",
+                // username
+                "nousername": "請填寫帳號",
+                "badusername": "帳號格式不符合",
+                // name
+                "noname": "請填寫暱稱",
+                "badname": "暱稱格式不符合",
+                // password
+                "nopassword": "請填寫新帳號密碼",
+                // email
+                "noemail": "請填寫信箱",
+                "bademail": "信箱格式不符合",
+                "emailused": "信箱已被其他使用者使用",
+                "lowlevel": "權限不足"
+            }
+
+            if (Object.keys(messages).includes(code)) {
+                pageManager.snackbar(messages[code]);
+            } else {
+                pageManager.snackbar("發生錯誤");
             }
         });
     }
@@ -256,9 +273,11 @@
         }
     }
 
-    function create(tag, className="") {
+    function create(tag, className) {
         let el = document.createElement(tag);
-        el.className = className;
+        if (className) {
+            el.className = className;
+        }
         return el;
     }
 

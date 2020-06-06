@@ -23,9 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] == "PATCH" || $_SERVER["REQUEST_METHOD"] == "POST
         // hack
     }
 
-    if (isset($_POST['username']) && (isset($_POST['name']) || isset($_POST['password']))) {
-        // modify account data
+    if (isset($_POST['username']) && trim($_POST['username']) !== "") {
         $username = trim($_POST['username']);
+
+        if (!preg_match('/^[a-z][a-z0-9\_\-]*$/', $username) || strlen($username) > 20) {
+            send_error(400, "badusername");
+        }
 
         try {
             $target_user = new User($username);
@@ -35,50 +38,81 @@ if ($_SERVER["REQUEST_METHOD"] == "PATCH" || $_SERVER["REQUEST_METHOD"] == "POST
             }
             // you cannot modify data of those with higher permission than you
             if ($target_user->level > $user->level) {
-            	send_error(403, "nopermission");
+                send_error(403, "nopermission");
             }
+
+            $mode = "update";
         } catch (NoUserException $e) {
             if ($_SERVER["REQUEST_METHOD"] == "PATCH") {
                 // modify one that not exist -> error
                 send_error(404, "nouser");
             } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // create new user
-                $SQL->query("INSERT INTO `user` (`username`) VALUES ('%s')", array($username));
+                $mode = "create";
             }
         }
 
-        if (trim($_POST['password']) != '') {
+        // validate data
+        if (isset($_POST['password']) && trim($_POST['password']) !== '') {
             $password = cavern_password_hash($_POST['password'], $username);
-            $SQL->query("UPDATE `user` SET `pwd`='%s' WHERE `username`='%s'", array($password, $username));
         }
-        if (trim($_POST['name']) != '' && strlen($_POST['name']) <= 40) {
-            $SQL->query("UPDATE `user` SET `name`='%s' WHERE `username`='%s'", array(htmlspecialchars($_POST['name']), $username));
+        if (isset($_POST['name']) && trim($_POST['name']) !== '') {
+            if (strlen($_POST['name']) > 40) {
+                send_error(400, "badname");
+            }
         } else {
             send_error(400, "noname");
         }
-        if (trim($_POST['email']) != '' && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-            $emailExist = cavern_query_result("SELECT * FROM `user` WHERE NOT `username`='%s' AND `email`='%s'", array($username, $_POST["email"]));
-            if ($emailExist['num_rows'] == 0) {
-                $SQL->query("UPDATE `user` SET `email`='%s' WHERE `username`='%s'", array($_POST['email'], $username));
+        if (isset($_POST['email']) && trim($_POST['email']) !== '') {
+            if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+                $emailExistQuery = cavern_query_result("SELECT * FROM `user` WHERE NOT `username`='%s' AND `email`='%s'", array($username, $_POST["email"]));
+                if ($emailExistQuery['num_rows'] > 0) {
+                    send_error(400, "emailused");
+                }
             } else {
-                send_error(400, "emailused");
+                send_error(400, "bademail");
             }
         } else {
             send_error(400, "noemail");
         }
 
+        // data creation / update
+        if ($mode == "update") {
+            // keep password field blank to keep using original password
+            if (isset($password)) {
+                $SQL->query("UPDATE `user` SET `pwd`='%s' WHERE `username`='%s'", array($password, $username));
+            }
+            $SQL->query("UPDATE `user` SET `name`='%s' WHERE `username`='%s'", array(htmlspecialchars($_POST['name']), $username));
+            $SQL->query("UPDATE `user` SET `email`='%s' WHERE `username`='%s'", array($_POST['email'], $username));
+        } else if ($mode == "create") {
+            // new users should have password
+            if (!isset($password)) {
+                send_error(400, "nopassword");
+            }
+
+            $SQL->query(
+                "INSERT INTO `user` (`username`, `pwd`, `name`, `email`) VALUES ('%s', '%s', '%s', '%s')",
+                array(
+                    $username,
+                    $password,
+                    htmlspecialchars($_POST['name']),
+                    $_POST['email']
+                )
+            );
+        } else if (!isset($mode)) {
+            send_error(500, "error");
+        }
+
+        // there is default value for 'muted' and 'role', so we update here
         if (isset($_POST["muted"])) {
             $muted = 1;
         } else {
             $muted = 0;
         }
 
-        $level = intval($_POST['role']);
-        if ($level > 9) {
-            $level = 9;
-        } else if ($level < 0) {
-            $level = 0;
-        }
+        // level range: 0~9
+        $level = max(0, min(9, intval($_POST['role'])));
+
         // you cannot promote user to level higher than youself
         if ($level > $user->level) {
             send_error(403, "lowlevel");
@@ -86,9 +120,11 @@ if ($_SERVER["REQUEST_METHOD"] == "PATCH" || $_SERVER["REQUEST_METHOD"] == "POST
 
         $SQL->query("UPDATE `user` SET `muted`='%d', `level`='%d' WHERE `username`='%s'", array($muted, $level, $username));
 
-        header("Content-Type: application/json");
-        echo json_encode(array("status" => TRUE, "modified" => $username));
+        // success http status code
+        http_response_code(($mode == "update") ? 204 : 201);
         exit;
+    } else {
+        send_error(400, "nousername");
     }
 } else if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // fetch user list (we can fetch single user data from ajax)
