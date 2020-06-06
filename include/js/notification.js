@@ -8,7 +8,6 @@ $('#menu .notification.icon.item').on('click', function (e) {
     e.preventDefault();
     let el = e.currentTarget;
 
-    let $wrapper = $('#notification-wrapper');
     let $container = $('.notification.container');
 
     if ($container.hasClass('active')) {
@@ -16,12 +15,6 @@ $('#menu .notification.icon.item').on('click', function (e) {
         $('.notification.click.handler').remove();
     } else {
         // render the notification window
-        let handler = document.createElement('div')
-        handler.className = "notification click handler";
-        $wrapper.after(handler);
-        handler.addEventListener('click', function (e) {
-            el.click();
-        });
         setNotificationCounter(0); // remove counter
         if (notifications.toFetch){
             fetchNotification();
@@ -52,6 +45,10 @@ function fetchNotificationCount() {
 
 window.addEventListener('DOMContentLoaded', function () {
     fetchNotificationCount();
+    // bind listener
+    $(".notification.click.handler").on('click', function (_e) {
+        $('#menu .notification.icon.item').click();
+    });
 });
 var notificationFetchTimer = setInterval(fetchNotificationCount, 1 * 60 * 1000); // fetch notification count every 1 minute
 

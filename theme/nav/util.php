@@ -24,5 +24,6 @@ $self = @end(explode('/',$_SERVER['PHP_SELF']));
         <div class="ts relaxed divided feed"></div>
         <a class="ts bottom attached fluid button" href="notification.php">看所有通知</a>
     </div>
+    <div class="notification click handler"></div>
 </div>
 <script src="include/js/notification.js"></script>
