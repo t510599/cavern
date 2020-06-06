@@ -61,7 +61,6 @@ editor = editormd('markdownEditor', {
         }
     },
     onpreviewing: function() {
-        this.save();
         // use tocas-ui style tables
         $('table').each((_i,e) => {
             $(e).addClass('ts celled table').css('display','table');
@@ -168,8 +167,3 @@ $('.action.column .delete').on('click', function(e) {
         }
     });
 });
-
-// session keep alive
-setInterval(function() {
-    $.get('ajax/posts.php');
-}, 5*60*1000);
