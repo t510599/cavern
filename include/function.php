@@ -35,11 +35,8 @@ function cavern_query_result($query, $data=array()) {
     $result['query'] = $SQL->query($query, $data);
     $result['row'] = $result['query']->fetch_assoc();
     $result['num_rows'] = $result['query']->num_rows;
-    if ($result['num_rows'] > 0) {
-        return $result;
-    } else {
-        return -1;
-    }
+    
+    return $result;
 }
 
 function cavern_level_to_role($level) {
@@ -100,23 +97,23 @@ function sumarize($string, $limit) {
 
     if (sizeof($lines) > $limit) {
         foreach ($lines as $line) {
-        if (trim($line) != "" && $content_start == FALSE) {
-            $content_start = TRUE; // don't count the empty line until the main content
-        }
-        if (!$content_start) {
-            continue;
-        }
-        $count++;
-        $text.=$line."\n";
-        if ($count == $limit || mb_strlen($text) >= 200) {
-            if (mb_strlen($text) >= 200) {
-                $text = mb_substr($text, 0, 200)."...\n";
+            if (trim($line) != "" && $content_start == FALSE) {
+                $content_start = TRUE; // don't count the empty line until the main content
             }
-            $text.="...(還有更多)\n";
-            break;
+            if (!$content_start) {
+                continue;
+            }
+            $count++;
+            $text.=$line."\n";
+            if ($count == $limit || mb_strlen($text) >= 200) {
+                if (mb_strlen($text) >= 200) {
+                    $text = mb_substr($text, 0, 200)."...\n";
+                }
+                $text.="...(還有更多)\n";
+                break;
+            }
         }
-    }
-    return $text;
+        return $text;
     } else {
         return $string;
     }
