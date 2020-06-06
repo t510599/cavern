@@ -205,7 +205,7 @@ function parseComments(data) {
         } else {
             $('#comment .menu .indicator').text(`Editing: ${commentId}`);
         }
-        editor.value = post.comments[post.idList.indexOf(commentId)].markdown;
+        editor.value = _.unescape(post.comments[post.idList.indexOf(commentId)].markdown);
         editor.focus();
     }
 
