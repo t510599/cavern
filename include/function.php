@@ -96,7 +96,10 @@ function sumarize($string, $limit) {
     $count = 0;
     $text = "";
     $content_start = FALSE;
-    foreach (explode("\n", $string) as $line) {
+    $lines = explode("\n", $string);
+
+    if (sizeof($lines) > $limit) {
+        foreach ($lines as $line) {
         if (trim($line) != "" && $content_start == FALSE) {
             $content_start = TRUE; // don't count the empty line until the main content
         }
@@ -114,4 +117,7 @@ function sumarize($string, $limit) {
         }
     }
     return $text;
+    } else {
+        return $string;
+    }
 } 
