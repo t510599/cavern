@@ -1,4 +1,8 @@
 /* General style */
+:root {
+    --monospace-font: "Source Code Pro", "YaHei Consolas Hybrid", 'Consolas', "Segoe UI Mono", "Microsoft JhengHei", "微軟正黑體", monospace;
+}
+
 * {
     letter-spacing: .02em;
 }
@@ -29,27 +33,27 @@ div.table.wrapper:not(:last-child) {
 }
 
 .markdown-body h1:not(.ts):not(.unstyled) {
-    font-size: 1.6em;
+    font-size: 1.65em;
 }
 
 .markdown-body h2:not(.ts):not(.unstyled) {
-    font-size: 1.5em;
+    font-size: 1.55em;
 }
 
 .markdown-body h3:not(.ts):not(.unstyled) {
-    font-size: 1.4em;
+    font-size: 1.45em;
 }
 
 .markdown-body h4:not(.ts):not(.unstyled) {
-    font-size: 1.3em;
+    font-size: 1.35em;
 }
 
 .markdown-body h5:not(.ts):not(.unstyled) {
-    font-size: 1.2em;
+    font-size: 1.25em;
 }
 
 .markdown-body h6:not(.ts):not(.unstyled) {
-    font-size: 1.1em;
+    font-size: 1.15em;
 }
 
 .markdown-body > .markdown + * { /* .markdown is invisible and the first element in a post, so neighbor of .markdown is the first visible element */
@@ -64,6 +68,7 @@ div.table.wrapper:not(:last-child) {
     background-color: inherit;
 }
 
+.editormd-preview-container code,
 .editormd-html-preview code { /* inline code */
     font-size: 12px;
 }
@@ -81,14 +86,17 @@ img.emoji {
 }
 
 /* fonts */
-/* prevent this rule from overwriting the style of <span> of KaTeX */
-.markdown-body *:not(span), .markdown-body > :not(.editormd-tex) span,
-/* editor font */
-[class*="CodeMirror"] *, [class*="cm"] * {
-    font-family: Consolas,"SF Pro TC","SF Pro Text","SF Pro Icons","PingFang TC","Helvetica Neue","Helvetica","Microsoft JhengHei","Segoe UI",Ubuntu,微軟正黑體,"LiHei Pro","Droid Sans Fallback",Roboto,"Helvetica Neue","Droid Sans","Arial",sans-serif;
+.markdown-body *, .editormd-html-preview * {
+    font-family: "Open Sans", "Consolas", "Microsoft JhengHei", "微軟正黑體", Roboto, "Droid Sans", "Arial", sans-serif;
 }
 
-.katex * { /* hack */
+/* editor font */
+[class*="CodeMirror"] *, [class*="cm"] * {
+    font-family: "Source Code Pro", "Consolas", "Microsoft JhengHei", "微軟正黑體", Roboto, "Droid Sans", sans-serif;
+}
+
+/* prevent last rule from overwriting the font of KaTeX */
+span.katex span.katex-html * {
     font-family: KaTeX_Main, Times New Roman, serif;
 }
 
@@ -249,34 +257,22 @@ img.emoji {
     margin-top: 0;
 }
 
-.markdown-body#post h1:not(.ts) {
-    font-size: 2em;
+.markdown-body ol:not(.ts):not(.unstyled) {
+    margin-left: 1.75em;
 }
 
-.markdown-body#post h2:not(.ts) {
-    font-size: 1.85em;
-}
-
-.markdown-body#post h3:not(.ts) {
-    font-size: 1.7em;
-}
-
-.markdown-body#post h4:not(.ts) {
-    font-size: 1.55em;
-}
-
-.markdown-body#post h5:not(.ts) {
-    font-size: 1.4em;
-}
-
-.markdown-body#post h6:not(.ts) {
-    font-size: 1.25em;
+.markdown-body ol:not(.ts):not(.unstyled) li::before {
+    margin-left: -1.75em;
 }
 
 #toc {
     min-height: 8em;
     max-height: calc(95vh - 3em);
     overflow-x: auto;
+}
+
+.markdown-body pre, .markdown-body code, .markdown-body kbd {
+    font-family: var(--monospace-font);
 }
 
 /* code block */
@@ -300,7 +296,7 @@ pre.prettyprint ol.linenums:not(.ts) > li > code {
 }
 
 pre.prettyprint ol.linenums:not(.ts) > li > code > span {
-    font-family: "YaHei Consolas Hybrid", 'Consolas', "Meiryo UI", "Malgun Gothic", "Segoe UI", "Trebuchet MS", Helvetica, monospace;
+    font-family: var(--monospace-font);
 }
 
 /* post editor */
