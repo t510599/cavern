@@ -50,7 +50,7 @@ function fetchNotificationCount() {
     });
 }
 
-window.addEventListener('load', function () {
+window.addEventListener('DOMContentLoaded', function () {
     fetchNotificationCount();
 });
 var notificationFetchTimer = setInterval(fetchNotificationCount, 1 * 60 * 1000); // fetch notification count every 1 minute
