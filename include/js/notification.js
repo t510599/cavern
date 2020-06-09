@@ -10,10 +10,7 @@ $('#menu .notification.icon.item').on('click', function (e) {
 
     let $container = $('.notification.container');
 
-    if ($container.hasClass('active')) {
-        // dismiss the notification window
-        $('.notification.click.handler').remove();
-    } else {
+    if (!$container.hasClass('active')) {
         // render the notification window
         setNotificationCounter(0); // remove counter
         if (notifications.toFetch){

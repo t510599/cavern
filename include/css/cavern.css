@@ -106,6 +106,10 @@ span.katex span.katex-html * {
 }
 
 /* menu */
+#menu {
+    z-index: 2;
+}
+
 #menu button.login.button {
     margin: 5px;
 }
