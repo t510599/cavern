@@ -239,6 +239,7 @@ span.katex span.katex-html * {
 #content .ts.grid > #header > .ts.header {
     /* align this with post content */
     padding-left: 15px;
+    word-break: break-all;
 }
 
 #content .ts.grid > .action.column {
