@@ -75,7 +75,7 @@
             let action = `<td class="left aligned collapsing">` +
                          `<a class="ts circular icon button" href="/user/${user['username']}" data-navigo><i class="pencil icon"></i></a>`;
             if (user.level != 9) {
-                action += `<a class="ts negative circular icon button" href="./user/delete/${user['username']}" data-username="${user['username']}"><i class="user delete icon"></i></a>`;
+                action += `<a class="ts negative circular icon button" href="./users/delete/${user['username']}" data-username="${user['username']}"><i class="user delete icon"></i></a>`;
             }
             action += `</td>`;
             tr.insertAdjacentHTML("beforeend", action);

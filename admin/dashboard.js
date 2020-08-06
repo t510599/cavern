@@ -87,10 +87,10 @@ router.on({
     "/post/user/:username": function (params) {
         render("post", "user", params.username);
     },
-    "/user": function () {
+    "/users": function () {
         render("user", "list");
     },
-    "/user/add": function () {
+    "/users/add": function () {
         render("user", "add");
     },
     "/user/:username": function (params) {
