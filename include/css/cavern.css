@@ -68,16 +68,15 @@ div.table.wrapper:not(:last-child) {
     background-color: inherit;
 }
 
-.editormd-preview-container code,
-.editormd-html-preview code { /* inline code */
+.markdown-body code { /* inline code */
     font-size: 12px;
 }
 
-.editormd-html-preview a {
+.markdown-body a {
     word-break: break-all;
 }
 
-.editormd-html-preview img {
+.markdown-body img {
     margin: .4em 0;
 }
 
