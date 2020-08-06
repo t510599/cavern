@@ -18,3 +18,10 @@ $comment_count = intval(cavern_query_result("SELECT COUNT(*) AS `count` FROM `co
 
 header('Content-Type: application/json');
 echo json_encode(array("fetch" => round($_SERVER["REQUEST_TIME_FLOAT"] * 1000), "name" => $blog['name'], "post" => $post_count, "user" => $user_count, "comment" => $comment_count));
+
+function send_error($code, $message) {
+    http_response_code($code);
+    header('Content-Type: application/json');
+    echo json_encode(array('status' => $message));
+    exit;
+}
