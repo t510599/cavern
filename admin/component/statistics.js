@@ -7,8 +7,19 @@
             renderPage(res.data);
         }).catch(function (err) {
             if (err.response) {
-                console.error(err.response.status);
+                switch (err.response.data.status) {
+                    case "nopermission":
+                        pageManager.snackbar("沒有權限，請確認登入狀態");
+                        break;
+                    default:
+                        pageManager.snackbar("發生錯誤");
+                        console.error(err);
+                        break;
+                }
             }
+            setTimeout(() => {
+                pageManager.setLoaderState(false);
+            }, 1000);
         });
     }
 
